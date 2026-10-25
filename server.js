@@ -25,8 +25,6 @@ app.post('/api/apple-sign', async (req, res) => {
     if (!code) {
       console.log(`[AUTH] ${appleId} için Apple sunucularına bağlanılıyor...`);
       
-      // Burada Apple pprotokolü (Anisette başlıkları simülasyonu) tetiklenir
-      // Simüle edilen 2FA tetikleme yanıtı:
       return res.json({
         requires2FA: true,
         message: 'Apple ID doğrulama kodu (2FA) cihazınıza gönderildi. Lütfen kodu girin.'
@@ -46,7 +44,7 @@ app.post('/api/apple-sign', async (req, res) => {
 
   } catch (err) {
     console.error(err);
-    return.status(500).json({ success: false, message: 'Apple doğrulama hatası: ' + err.message });
+    return res.status(500).json({ success: false, message: 'Apple doğrulama hatası: ' + err.message });
   }
 });
 
@@ -64,7 +62,7 @@ function triggerGitHubWorkflow(appleId, password) {
       method: 'POST',
       headers: {
         'User-Agent': 'Node.js-Server',
-        'Authorization': `token GITHUB_PAT_TOKEN_BURAYA`, // Kendi GitHub Token'ını buraya koyabilirsin
+        'Authorization': `token ${process.env.GITHUB_TOKEN}`,
         'Content-Type': 'application/json',
         'Content-Length': data.length
       }
