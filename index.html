@@ -1,1 +1,151 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uygulama İndir</title>
+    <!-- Font Awesome İkonları -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .download-card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 16px;
+            padding: 32px;
+            width: 100%;
+            max-width: 440px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .download-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 25px 30px -5px rgba(0, 0, 0, 0.6);
+        }
+
+        .icon-wrapper {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 20px auto;
+            font-size: 32px;
+        }
+
+        .title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #ffffff;
+        }
+
+        .description {
+            font-size: 14px;
+            color: #94a3b8;
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .download-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 14px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-github {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+        .btn-github:hover {
+            background: linear-gradient(135deg, #1d4ed8, #1e40af);
+            transform: scale(1.02);
+        }
+
+        .btn-ios {
+            background: linear-gradient(135deg, #0284c7, #0369a1);
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+        }
+        .btn-ios:hover {
+            background: linear-gradient(135deg, #0369a1, #075985);
+            transform: scale(1.02);
+        }
+
+        .download-btn:active {
+            transform: scale(0.98);
+        }
+
+        .footer-note {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #64748b;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="download-card">
+        <div class="icon-wrapper">
+            <i class="fa-solid fa-download"></i>
+        </div>
+        
+        <h2 class="title">Uygulamayı İndir</h2>
+        <p class="description">İhtiyacınıza uygun platformu seçerek en son sürümü cihazınıza hemen yükleyin.</p>
+        
+        <div class="button-group">
+            <!-- Github / PC Sürümü -->
+            <a href="https://github.com/TRServer-Inc/html-download-test/releases/download/1.0.0/Among.Us.v2026.9.293.0-OFME.rar" class="download-btn btn-github" download>
+                <i class="fa-brands fa-github"></i>
+                <span>GitHub Releases (PC / ZIP)</span>
+            </a>
+
+            <!-- iOS / Direct Install -->
+            <a href="itms-services://?action=download-manifest&url=https://raw.githubusercontent.com/TRServer-Inc/html-download-test/main/manifest.plist" class="download-btn btn-ios">
+                <i class="fa-brands fa-apple"></i>
+                <span>iOS Doğrudan Yükle (Direct Install)</span>
+            </a>
+        </div>
+
+        <div class="footer-note">
+            <i class="fa-solid fa-shield-halved"></i> Güvenli indirme bağlantıları
+        </div>
+    </div>
+
+</body>
+</html>
