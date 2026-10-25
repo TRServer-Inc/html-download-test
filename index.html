@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Uygulama İndir</title>
+    <title>Uygulama İndir & Sign Paneli</title>
     <!-- Font Awesome İkonları -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -18,12 +18,15 @@
             background-color: #0f172a;
             color: #f8fafc;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            padding: 20px;
+            gap: 20px;
         }
 
-        .download-card {
+        .download-card, .admin-card {
             background: #1e293b;
             border: 1px solid #334155;
             border-radius: 16px;
@@ -35,7 +38,7 @@
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .download-card:hover {
+        .download-card:hover, .admin-card:hover {
             transform: translateY(-4px);
             box-shadow: 0 25px 30px -5px rgba(0, 0, 0, 0.6);
         }
@@ -73,7 +76,7 @@
             gap: 12px;
         }
 
-        .download-btn {
+        .download-btn, .action-btn {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -87,6 +90,8 @@
             font-size: 15px;
             transition: all 0.2s ease;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            border: none;
+            cursor: pointer;
         }
 
         .btn-github {
@@ -107,8 +112,49 @@
             transform: scale(1.02);
         }
 
-        .download-btn:active {
-            transform: scale(0.98);
+        .btn-sign {
+            background: linear-gradient(135deg, #10b981, #059669);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+        .btn-sign:hover {
+            background: linear-gradient(135deg, #059669, #047857);
+            transform: scale(1.02);
+        }
+
+        .input-group {
+            margin-bottom: 12px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 12px;
+            color: #94a3b8;
+            margin-bottom: 6px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #334155;
+            background: #0f172a;
+            color: #ffffff;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .input-group input:focus {
+            border-color: #3b82f6;
+        }
+
+        .status-box {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            font-size: 13px;
+            color: #cbd5e1;
         }
 
         .footer-note {
@@ -120,6 +166,7 @@
 </head>
 <body>
 
+    <!-- Ana İndirme Kartı -->
     <div class="download-card">
         <div class="icon-wrapper">
             <i class="fa-solid fa-download"></i>
@@ -147,5 +194,72 @@
         </div>
     </div>
 
+    <!-- Apple ID & Auto-Sign Yönetim Kartı -->
+    <div class="admin-card">
+        <div class="icon-wrapper" style="color: #10b981; background: rgba(16, 185, 129, 0.1);">
+            <i class="fa-solid fa-key"></i>
+        </div>
+        <h2 class="title">Apple ID Otomatik Sign Paneli</h2>
+        <p class="description">6 günde bir IPA dosyasını tazelemek için Apple hesabınızla giriş yapın.</p>
+
+        <form id="signForm">
+            <div class="input-group">
+                <label>Apple ID (E-posta)</label>
+                <input type="email" id="appleId" placeholder="example@icloud.com" required>
+            </div>
+            <div class="input-group">
+                <label>Apple ID Şifre</label>
+                <input type="password" id="applePassword" placeholder="••••••••" required>
+            </div>
+            <div class="input-group" id="2faGroup" style="display: none;">
+                <label>2FA Doğrulama Kodu (Telefondan Gelen)</label>
+                <input type="text" id="twoFactorCode" placeholder="123456" maxlength="6">
+            </div>
+
+            <button type="submit" class="action-btn btn-sign" id="submitBtn">
+                <i class="fa-solid fa-rotate"></i>
+                <span>Apple Hesabı Bağla & Sign Yap</span>
+            </button>
+        </form>
+
+        <div class="status-box" id="statusBox">
+            Durum: Giriş bekleniyor... (Sistem 6 günde 1 otomatik yeniler)
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('signForm');
+        const twoFaGroup = document.getElementById('2faGroup');
+        const statusBox = document.getElementById('statusBox');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const appleId = document.getElementById('appleId').value;
+            const applePassword = document.getElementById('applePassword').value;
+            const code = document.getElementById('twoFactorCode').value;
+
+            statusBox.innerText = "Apple sunucularına bağlanılıyor...";
+
+            try {
+                const res = await fetch('/api/apple-sign', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ appleId, applePassword, code })
+                });
+                const data = await res.json();
+
+                if (data.requires2FA) {
+                    twoFaGroup.style.display = 'block';
+                    statusBox.innerText = "Lütfen telefonunuza gelen 6 haneli 2FA kodunu girip tekrar 'Sign Yap' butonuna basın.";
+                } else if (data.success) {
+                    statusBox.innerText = "Başarılı! IPA imzalandı ve 6 günde bir otomatik yenilenecek şekilde kuruldu.";
+                } else {
+                    statusBox.innerText = "Hata: " + (data.message || "Giriş başarısız.");
+                }
+            } catch (err) {
+                statusBox.innerText = "Sunucu hatası veya bağlantı kurulamadı.";
+            }
+        });
+    </script>
 </body>
 </html>
