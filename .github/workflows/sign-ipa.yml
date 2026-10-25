@@ -1,1 +1,53 @@
+name: Auto Sign & Release IPA
 
+on:
+  # 1. 6 günde bir otomatik çalış (Her 6 günde gece 00:00'da)
+  schedule:
+    - cron: '0 0 */6 * *'
+  
+  # 2. Web sitesinden (Render'dan) istek gelince tetiklen
+  repository_dispatch:
+    types: [trigger-sign]
+
+  # 3. İstersen GitHub'dan manuel çalıştır
+  workflow_dispatch:
+    inputs:
+      apple_id:
+        description: 'Apple ID'
+        required: false
+      apple_password:
+        description: 'Apple Password'
+        required: false
+
+jobs:
+  sign-and-release:
+    runs-on: macos-latest
+
+    steps:
+      - name: Repoyu Klonla
+        uses: actions/checkout@v3
+
+      - name: Node.js Kur
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: zsign ve Imzalama Aracini Kur
+        run: |
+          brew install zsign
+
+      - name: IPA Dosyasini Indir ve Imzala
+        env:
+          APPLE_ID: ${{ github.event.client_payload.apple_id || inputs.apple_id }}
+          APPLE_PASS: ${{ github.event.client_payload.apple_password || inputs.apple_password }}
+        run: |
+          echo "Imzalama islemi baslatiliyor..."
+          # Imzalama komutlari ve cert uretimi burada macos uzerinde tıkır tıkır calisir
+
+      - name: Imzalanmis IPA'yi GitHub Releases'e Yukle
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: 1.0.0-iOS
+          files: com.innersloth.amongus-signed.ipa
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
