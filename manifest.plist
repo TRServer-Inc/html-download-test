@@ -11,21 +11,18 @@
                     <key>kind</key>
                     <string>software-package</string>
                     <key>url</key>
-                    <!-- IPA DOSYANIN DOĞRUDAN HTTPS LİNKİ -->
                     <string>https://github.com/TRServer-Inc/html-download-test/releases/download/1.0.0-iOS/com.innersloth.amongus-2026.19.0-Decrypted.ipa</string>
                 </dict>
             </array>
             <key>metadata</key>
             <dict>
                 <key>bundle-identifier</key>
-                <!-- UYGULAMANIN BUNDLE ID'Sİ (ÖRN: com.realmert.app) -->
                 <string>com.innersloth.spacemafia</string>
                 <key>bundle-version</key>
-                <string>1.0.0</string>
+                <string>2026.19.0</string>
                 <key>kind</key>
                 <string>software</string>
                 <key>title</key>
-                <!-- CİHAZDA YÜKLENİRKEN GÖRÜNECEK ADI -->
                 <string>Among Us</string>
             </dict>
         </dict>
